@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Matching Game</title>
+		<meta name="author" content="Bijan Fazeli">
+		<!--CSS styling-->
+		<style>
+			img {
+				position: absolute;
+			}
+			body div:not(:first-child) {
+				position: absolute;
+				width: 500px;
+				height: 500px;
+			}
+			#rightSide {
+				left: 500px;
+				border-left: 1px solid black;
+			}
+		</style>
+		<!--JS code-->
+		<script>
+			//Declare a global variable, 'numberOfFaces' and initialize it to 5.
+			var numberOfFaces = 5;
+			//Creat a function to generate faces
+			function generateFaces() {
+				/*Declare two variables for theLeftSide and theRightSide
+				of the document and initialize them respictevely*/
+				var theLeftSide = document.getElementById("leftSide");
+				var theRightSide = document.getElementById("rightSide");
+				//Decalre a variable 'theBody' and assign it the body
+				var theBody = document.getElementsByTagName("body")[0];
+				//Use a for loop to generate 5 faces on the leftSide
+				for (var i = 1; i <= numberOfFaces; i++) {
+					var smiley = document.createElement("img");
+					var randomTopPosition = Math.ceil(Math.random() * 400);
+					var randomLeftPosition = Math.ceil(Math.random() * 400);
+					smiley.setAttribute('src', 'https://openmerchantaccount.com/img/smile.png');
+					smiley.style.top = randomTopPosition + "px";
+					smiley.style.left = randomLeftPosition + "px";
+					theLeftSide.appendChild(smiley);
+				}
+				//Clone the left side of images, delete the last image and add it to theRightSide
+				var leftSideImages = theLeftSide.cloneNode(true);
+				leftSideImages.removeChild(leftSideImages.lastChild);
+				theRightSide.appendChild(leftSideImages);
+				//Create an on click event handler for the extra face
+				theLeftSide.lastChild.onclick = function nextLevel (event) {
+					event.stopPropagation();
+					numberOfFaces +=5;
+					//Delete the child nodes of theLeftSide and theRightSIde
+					while(theLeftSide.firstChild)
+					{
+						theLeftSide.removeChild(theLeftSide.firstChild);
+					}
+					while(theRightSide.firstChild)
+					{
+						theRightSide.removeChild(theRightSide.firstChild);
+					}
+					//Reproduce another new set of faces
+					generateFaces();
+				};
+				//Create an on click event handler for the body
+				theBody.onclick = function gameOver () {
+					alert("Game Over!");
+					theBody.onclick = null;
+					theLeftSide.lastChild.onclick = null;
+				}
+			}
+		</script>
+	</head>
+	<body onload="generateFaces()">
+		<!--State title and instructions-->
+		<div>
+			<h1>Matching Game</h1>
+			<p>Click on the extra smiling face on the left.</p>
+		</div>
+		<!--Faces shown on the left side-->
+		<div id="leftSide">
+		</div>
+		<!--Faces shown on the right side-->
+		<div id ="rightSide">
+		</div>
+	</body>
+</html>
